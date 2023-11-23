@@ -1,0 +1,75 @@
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  dev:
+    name: "Dev Deployment"
+    environment: dev
+    runs-on: 'ubuntu-latest'
+    if: startsWith(github.ref, 'ref/heads/feat/')
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        secrets: inherit
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ID }}
+      
+      - name: Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+      
+      - name: Terraform Init on Dev
+        run: |
+          cd terraform 
+          terraform init
+            
+
+      - name: Terraform Plan on Dev
+        run: |
+          cd terraform 
+          terraform fmt -check
+          terraform plan
+
+      - name: Terraform Apply on Dev
+        run: |
+          cd terraform 
+          terraform apply -auto-approve
+            
+  prod:
+    name: "Prod Deployment"
+    environment: prod
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        secrets: inherit
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ID }}
+      
+      - name: Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+      
+      - name: Terraform Init on Prod
+        run: |
+          cd terraform 
+          terraform init
+            
+
+      - name: Terraform Plan on Prod
+        run: |
+          cd terraform 
+          terraform fmt -check
+          terraform plan
+
+      - name: Terraform Apply on Prod
+        run: |
+          cd terraform 
+          terraform apply -auto-approve 
