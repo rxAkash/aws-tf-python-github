@@ -5,19 +5,18 @@ on:
 jobs:
   dev:
     name: "Dev Deployment"
-    environment: dev
     runs-on: 'ubuntu-latest'
-    if: startsWith(github.ref, 'ref/heads/feat/')
+    if: startsWith(github.ref, 'refs/heads/feat/')
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
-        secrets: inherit
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-2
       
       - name: Configure Terraform
         uses: hashicorp/setup-terraform@v2
@@ -41,7 +40,6 @@ jobs:
             
   prod:
     name: "Prod Deployment"
-    environment: prod
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout Repo
