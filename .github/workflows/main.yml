@@ -23,24 +23,21 @@ jobs:
         uses: hashicorp/setup-terraform@v2
       
       - name: Terraform Init on Dev
-        with: 
-          command: |
-            cd terraform 
-            terraform init
+        run: |
+          cd terraform 
+          terraform init
             
 
       - name: Terraform Plan on Dev
-        with: 
-          command: |
-            cd terraform 
-            terraform fmt -check
-            terraform plan
+        run: |
+          cd terraform 
+          terraform fmt -check
+          terraform plan
 
       - name: Terraform Apply on Dev
-        with: 
-          command: |
-            cd terraform 
-            terraform apply -auto-approve
+        run: |
+          cd terraform 
+          terraform apply -auto-approve
             
   prod:
     name: "Prod Deployment"
@@ -61,21 +58,18 @@ jobs:
         uses: hashicorp/setup-terraform@v2
       
       - name: Terraform Init on Prod
-        with: 
-          command: |
-            cd terraform 
-            terraform init
+        run: |
+          cd terraform 
+          terraform init
             
 
       - name: Terraform Plan on Prod
-        with: 
-          command: |
-            cd terraform 
-            terraform fmt -check
-            terraform plan
+        run: |
+          cd terraform 
+          terraform fmt -check
+          terraform plan
 
       - name: Terraform Apply on Prod
-        with: 
-          command: |
-            cd terraform 
-            terraform apply -auto-approve 
+        run: |
+          cd terraform 
+          terraform apply -auto-approve 
